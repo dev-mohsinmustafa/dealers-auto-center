@@ -20,6 +20,24 @@ class UserService {
       email: savedUser.email,
     };
   }
+
+  async loginUser({ email, password }) {
+    const user = await userRepository.findByEmail(email);
+    if (!user) {
+      throw new CustomError('Invalid credentials', statusCodes.UNAUTHORIZED);
+    }
+    
+    // Exact match for our mock password flow
+    if (user.password !== password) {
+      throw new CustomError('Invalid credentials', statusCodes.UNAUTHORIZED);
+    }
+
+    return {
+      id: user.id,
+      fullName: user.fullName,
+      email: user.email,
+    };
+  }
 }
 
 module.exports = new UserService();

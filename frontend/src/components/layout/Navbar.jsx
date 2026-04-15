@@ -17,6 +17,9 @@ const Navbar = () => {
           <Link to="/register" className={location.pathname === '/register' ? 'active' : ''}>
             Register
           </Link>
+          <Link to="/login" className={location.pathname === '/login' ? 'active' : ''}>
+            Login
+          </Link>
         </div>
       </div>
     </nav>

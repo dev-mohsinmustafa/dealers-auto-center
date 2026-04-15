@@ -13,6 +13,7 @@ export const vehicleApi = {
 
 export const userApi = {
   register: (data) => api.post('/users/register', data),
+  login: (data) => api.post('/users/login', data),
 };
 
 export default api;
