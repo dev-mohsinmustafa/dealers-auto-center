@@ -1,24 +1,39 @@
 .vehicle-card {
-  background: var(--color-white);
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
   overflow: hidden;
-  box-shadow: var(--shadow-md);
-  transition: all var(--transition-normal);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  transition: all var(--transition-slow);
   display: flex;
   flex-direction: column;
   height: 100%;
+  position: relative;
+}
+
+.vehicle-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: var(--radius-xl);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05); /* inner subtle border */
+  pointer-events: none;
 }
 
 .vehicle-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), var(--shadow-glow);
+  border-color: rgba(59, 130, 246, 0.4);
 }
 
 .card-image-wrapper {
   position: relative;
   width: 100%;
-  padding-top: 60%; /* Aspect ratio 5:3 */
+  padding-top: 65%; /* Slightly taller aspect ratio */
   overflow: hidden;
+  background: #000; /* fallback while loading */
 }
 
 .card-image {
@@ -28,59 +43,75 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0.9;
 }
 
 .vehicle-card:hover .card-image {
-  transform: scale(1.05);
+  transform: scale(1.1);
+  opacity: 1;
 }
 
 .price-tag {
   position: absolute;
-  bottom: 1rem;
-  right: 1rem;
-  background: rgba(15, 23, 42, 0.85); /* strict dark with opacity */
-  backdrop-filter: blur(4px);
-  color: var(--color-white);
-  padding: 0.4rem 0.8rem;
-  border-radius: var(--radius-lg);
-  font-weight: 700;
-  font-size: 1.1rem;
+  bottom: 1.2rem;
+  right: 1.2rem;
+  background: rgba(2, 6, 23, 0.85); /* deep slate */
+  backdrop-filter: blur(8px);
+  color: #34d399; /* Bright mint green for price */
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+  font-weight: 800;
+  font-size: 1.15rem;
   letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(52, 211, 153, 0.2);
 }
 
 .card-content {
-  padding: 1.5rem;
+  padding: 1.75rem 1.5rem;
   flex-grow: 1;
+  background: linear-gradient(to bottom, transparent, rgba(15, 23, 42, 0.8));
 }
 
 .card-title {
-  font-size: 1.25rem;
-  margin-bottom: 0.5rem;
-  color: var(--color-dark);
+  font-size: 1.35rem;
+  margin-bottom: 0.6rem;
+  color: var(--color-dark); /* remapped to white */
+  font-weight: 700;
 }
 
 .card-subtitle {
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
+  color: var(--color-primary); /* Use vibrant primary color instead of muted */
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .card-footer {
   padding: 1.5rem;
   padding-top: 0;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--glass-border);
   margin-top: auto;
   display: flex;
 }
 
 .btn-outline {
   width: 100%;
-  background: transparent;
-  color: var(--color-primary);
-  border: 1px solid var(--color-primary);
+  background: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.9rem;
+  padding: 0.85rem;
 }
 
 .btn-outline:hover {
   background: var(--color-primary);
-  color: var(--color-white);
+  color: #fff;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
 }

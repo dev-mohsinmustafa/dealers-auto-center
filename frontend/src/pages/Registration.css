@@ -1,18 +1,21 @@
 .registration-container {
   display: flex;
-  justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 80px); /* Minus navbar Approx */
-  padding: 3rem 1.5rem;
+  justify-content: center;
+  min-height: calc(100vh - 80px); /* Adjust based on navbar height */
+  padding: 4rem 1.5rem;
 }
 
 .registration-card {
-  background: var(--color-white);
-  padding: 2.5rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
+  padding: 3rem 2.5rem;
   width: 100%;
   max-width: 500px;
+  box-shadow: var(--shadow-lg), 0 0 40px rgba(139, 92, 246, 0.1);
   position: relative;
   overflow: hidden;
 }
@@ -20,26 +23,41 @@
 .registration-card::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 6px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  top: -50px; left: -50px;
+  width: 150px; height: 150px;
+  background: var(--color-primary);
+  filter: blur(80px);
+  opacity: 0.4;
+  z-index: -1;
+}
+
+.registration-card::after {
+  content: '';
+  position: absolute;
+  bottom: -50px; right: -50px;
+  width: 150px; height: 150px;
+  background: var(--color-accent);
+  filter: blur(80px);
+  opacity: 0.3;
+  z-index: -1;
 }
 
 .registration-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .registration-header h2 {
-  font-size: 2rem;
-  color: var(--color-dark);
-  margin-bottom: 0.5rem;
+  font-size: 2.2rem;
+  margin-bottom: 0.75rem;
+  background: linear-gradient(to right, #ffffff, #cbd5e1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .registration-header p {
   color: var(--color-text-muted);
+  font-size: 1.05rem;
 }
 
 .submit-btn {
@@ -47,4 +65,11 @@
   padding: 1rem;
   font-size: 1.1rem;
   margin-top: 1rem;
+  border-radius: var(--radius-md);
+}
+
+.global-error {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
 }

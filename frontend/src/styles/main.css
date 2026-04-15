@@ -1,5 +1,5 @@
 @import './variables.css';
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 * {
   box-sizing: border-box;
@@ -14,6 +14,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
+  min-height: 100vh;
+  /* Add a subtle radial gradient to the background for depth */
+  background-image: radial-gradient(circle at top right, rgba(30, 27, 75, 0.8), transparent 40%),
+                    radial-gradient(circle at bottom left, rgba(15, 23, 42, 1), transparent 50%);
+  background-attachment: fixed;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -25,39 +30,49 @@ h1, h2, h3, h4, h5, h6 {
 a {
   text-decoration: none;
   color: var(--color-primary);
-  transition: color var(--transition-fast);
+  transition: all var(--transition-fast);
 }
 
 a:hover {
   color: var(--color-primary-hover);
+  text-shadow: 0 0 8px rgba(96, 165, 250, 0.4);
 }
 
 /* Base Layout and Container */
 .container {
-  max-width: 1200px;
+  max-width: 1280px; /* Slightly wider for modern monitors */
   margin: 0 auto;
   padding: 0 1.5rem;
 }
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(15px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+}
+
 .animate-fade-in {
-  animation: fadeIn 0.4s ease forwards;
+  animation: fadeIn 0.5s var(--transition-normal) forwards;
+  opacity: 0;
 }
 
 /* Header/Navbar Setup */
 .navbar {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px);
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   position: sticky;
   top: 0;
   z-index: 50;
-  border-bottom: 1px solid var(--color-border);
-  padding: 1rem 0;
+  border-bottom: 1px solid var(--glass-border);
+  padding: 1.25rem 0;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
 }
 
 .navbar-content {
@@ -67,32 +82,47 @@ a:hover {
 }
 
 .navbar-brand {
-  font-size: 1.5rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  font-size: 1.75rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #60a5fa, #a78bfa, #34d399);
+  background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-decoration: none;
+  animation: gradientShift 6s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .navbar-links {
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .navbar-links a {
   color: var(--color-text-main);
   font-weight: 500;
-  font-size: 0.95rem;
-  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
   border-radius: var(--radius-md);
   transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
 }
 
-.navbar-links a:hover,
 .navbar-links a.active {
   background: var(--color-primary);
-  color: var(--color-white);
+  color: var(--color-dark);
+  box-shadow: var(--shadow-glow);
+}
+
+.navbar-links a:not(.active):hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
 }
 
 /* UI Elements */
@@ -100,22 +130,38 @@ a:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.75rem 1.5rem;
-  background-color: var(--color-primary);
-  color: var(--color-white);
+  padding: 0.85rem 1.75rem;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  color: #fff;
   border: none;
   border-radius: var(--radius-md);
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 1rem;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: all var(--transition-normal);
   box-shadow: var(--shadow-sm);
+  position: relative;
+  z-index: 1;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, var(--color-accent), var(--color-primary));
+  opacity: 0;
+  z-index: -1;
+  transition: opacity var(--transition-normal);
 }
 
 .btn:hover {
-  background-color: var(--color-primary-hover);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-accent-glow);
+}
+
+.btn:hover::before {
+  opacity: 1;
 }
 
 .btn:active {
@@ -123,59 +169,67 @@ a:hover {
 }
 
 .btn:disabled {
-  opacity: 0.7;
+  opacity: 0.5;
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
 }
 
 /* Form Styles */
 .form-group {
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
 .form-label {
   display: block;
   font-weight: 500;
-  margin-bottom: 0.5rem;
-  color: var(--color-dark-muted);
-  font-size: 0.9rem;
+  margin-bottom: 0.6rem;
+  color: var(--color-text-main);
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
 }
 
 .form-input {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.85rem 1.25rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   font-family: var(--font-family);
   font-size: 1rem;
+  color: var(--color-text-main);
   transition: all var(--transition-fast);
-  background: var(--color-white);
+  background: rgba(15, 23, 42, 0.5); /* Semi-transparent dark */
+  backdrop-filter: blur(8px);
 }
 
 .form-input:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  background: rgba(15, 23, 42, 0.8);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15), var(--shadow-glow);
 }
 
 .form-input.error {
   border-color: var(--color-error);
-  background-color: var(--color-error-bg);
+  box-shadow: 0 0 0 1px var(--color-error);
 }
 
 .error-message {
-  color: var(--color-error);
+  color: #fca5a5;
   font-size: 0.85rem;
-  margin-top: 0.25rem;
+  margin-top: 0.4rem;
   display: block;
+  font-weight: 500;
 }
 
 .success-message {
   padding: 1rem;
-  background-color: rgba(16, 185, 129, 0.1);
-  color: var(--color-success);
+  background-color: var(--color-success-bg);
+  color: #34d399;
   border-radius: var(--radius-md);
-  margin-bottom: 1rem;
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(16, 185, 129, 0.3);
   text-align: center;
+  font-weight: 500;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.1);
 }
