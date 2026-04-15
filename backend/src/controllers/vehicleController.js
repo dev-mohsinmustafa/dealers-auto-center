@@ -4,13 +4,13 @@ const { sendSuccess } = require('../utils/responseHandler');
 class VehicleController {
   async getVehicles(req, res, next) {
     try {
-      const { search, sort, order } = req.query;
+      const { search, sort, order, page = 1, limit = 6 } = req.query;
       
       // Control layer passes clean params to Service
-      const vehicles = await vehicleService.getVehicles(search, sort, order);
+      const result = await vehicleService.getVehicles(search, sort, order, parseInt(page, 10), parseInt(limit, 10));
       
       // Control layer returns response
-      return sendSuccess(res, vehicles, 'Vehicles fetched successfully');
+      return sendSuccess(res, result, 'Vehicles fetched successfully');
     } catch (error) {
       next(error);
     }

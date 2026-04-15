@@ -5,9 +5,10 @@ import VehicleCard from '../components/common/VehicleCard';
 import './Dashboard.css';
 
 const Dashboard = () => {
-  const { vehicles, loading, error, fetchVehicles } = useVehicleContext();
+  const { vehicles, loading, error, totalPages, fetchVehicles } = useVehicleContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOption, setSortOption] = useState(''); // e.g., 'price-asc', 'name-desc'
+  const [currentPage, setCurrentPage] = useState(1);
   
   const debouncedSearch = useDebounce(searchTerm, 500);
 
@@ -19,8 +20,21 @@ const Dashboard = () => {
       [sort, order] = sortOption.split('-');
     }
 
-    fetchVehicles(debouncedSearch, sort, order);
-  }, [debouncedSearch, sortOption, fetchVehicles]);
+    fetchVehicles(debouncedSearch, sort, order, currentPage);
+  }, [debouncedSearch, sortOption, currentPage, fetchVehicles]);
+
+  // Reset to first page when filtering
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearch, sortOption]);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(prev => prev + 1);
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) setCurrentPage(prev => prev - 1);
+  };
 
   return (
     <div className="dashboard container">
@@ -79,6 +93,28 @@ const Dashboard = () => {
                   <VehicleCard vehicle={vehicle} />
                 </div>
               ))}
+            </div>
+          )}
+          
+          {totalPages > 1 && (
+            <div className="pagination-container animate-fade-in" style={{ animationDelay: '0.3s' }}>
+              <button 
+                className="btn btn-outline page-btn" 
+                onClick={handlePrevPage} 
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              <span className="page-info">
+                Page {currentPage} of {totalPages}
+              </span>
+              <button 
+                className="btn btn-outline page-btn" 
+                onClick={handleNextPage} 
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </button>
             </div>
           )}
         </>

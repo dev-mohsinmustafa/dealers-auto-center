@@ -1,7 +1,7 @@
 const vehicleRepository = require('../repositories/vehicleRepository');
 
 class VehicleService {
-  async getVehicles(searchQuery = '', sortBy = '', order = 'asc') {
+  async getVehicles(searchQuery = '', sortBy = '', order = 'asc', page = 1, limit = 6) {
     let vehicles = await vehicleRepository.getAll();
 
     // Filtering logic
@@ -25,7 +25,17 @@ class VehicleService {
       });
     }
 
-    return vehicles;
+    const totalCount = vehicles.length;
+    const totalPages = Math.ceil(totalCount / limit) || 1;
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+    
+    return {
+      items: vehicles.slice(startIndex, endIndex),
+      totalCount,
+      totalPages,
+      currentPage: page
+    };
   }
 }
 
